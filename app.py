@@ -70,16 +70,15 @@ div[data-testid="column"] { padding: 0 0.5rem; }
 </style>
 """, unsafe_allow_html=True)
 
-import os
-import gdown
 
-model.load_weights(MODEL_PATH)
+MODEL_PATH = "retina_weights.weights.h5"
 
 FILE_ID = "1nj_E76r2iNSsjw17Y8LedwlYr3PxHK3w"
 
 if not os.path.exists(MODEL_PATH):
-    url = "https://drive.google.com/file/d/1nj_E76r2iNSsjw17Y8LedwlYr3PxHK3w/view?usp=sharing"
-    gdown.download(url, MODEL_PATH, quiet=False)
+    with st.spinner("Downloading AI model... first startup may take 1-2 minutes"):
+        url = f"https://drive.google.com/uc?id={FILE_ID}"
+        gdown.download(url, MODEL_PATH, quiet=False)
 
 @st.cache_resource(show_spinner=False)
 def load_model():
@@ -102,7 +101,7 @@ def load_model():
         layers.Dense(5, activation="softmax")
     ])
     
-    model.load_weights("models/retina_weights.weights.h5")
+    model.load_weights(MODEL_PATH)
     return model
 
 
